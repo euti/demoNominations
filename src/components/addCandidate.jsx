@@ -1,4 +1,8 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import {
+    addCandidate,
+} from "../store/actions";
 import {
     FormControl,
     TextField,
@@ -7,11 +11,17 @@ import {
     Button,
 } from '@material-ui/core';
 
-const AddCandidate = () => {
+const AddCandidate = (props) => {
     const [email,setEmail] = useState("");
     const [description,setDescription] = useState("");
     const [involvement,setInvolvement] = useState(5);
     const [talent,setTalent] = useState(5);
+    const [error,setError] = useState("");
+
+    const {
+        candidates,
+        addCandidate,
+    } = props;
 
     const marks = [
         { value: 0, label: 0 },
@@ -20,19 +30,42 @@ const AddCandidate = () => {
     ];
 
     const handleSave = () => {
+        const newCandidate = {
+            email,
+            description,
+            involvement,
+            talent,
+            status: talent < 8 ? "rejected" : "pending"
+        };
 
+        addCandidate(newCandidate);
+
+        setEmail("");
+        setDescription("");
+        setInvolvement(5);
+        setTalent(5);
     };
 
     return (
         <div id="addCandidate">
             <FormControl>
+                <Typography>
+                        {error}
+                </Typography>
                 {/* TODO add email validation */}
                 <TextField
                     id="email"
                     label="email"
                     variant="outlined"
-                    defaultValue={email}
-                    onChange={(e,value)=>setEmail(value)}
+                    value={email}
+                    onChange={ e => {
+                        if (candidates.findIndex(c=> c.email === e.target.value)>-1) {
+                            setError("email already in nominations")
+                        } else {
+                            setError("")
+                        };
+                        setEmail(e.target.value);
+                    }}
                 />
                 <TextField
                     id="description"
@@ -40,8 +73,8 @@ const AddCandidate = () => {
                     multiline
                     rows={4}
                     variant="outlined"
-                    defaultValue={description}
-                    onChange={(e,value)=>setDescription(value)}
+                    value={description}
+                    onChange={e=>setDescription(e.target.value)}
                 />
                 <Typography id="involvementText" gutterBottom>
                     involvement
@@ -68,6 +101,7 @@ const AddCandidate = () => {
                 <Button
                     variant="contained"
                     onClick={handleSave}
+                    disabled={error}
                 >
                     save
                 </Button>
@@ -76,4 +110,14 @@ const AddCandidate = () => {
     )
 };
 
-export default AddCandidate;
+const mapStateToProps = state => {
+    return {
+        candidates: state.candidates,
+    }
+};
+
+const mapDispatchToProps = {
+    addCandidate,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddCandidate);
