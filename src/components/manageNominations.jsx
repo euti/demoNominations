@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import {
+    FormControlLabel,
+    Checkbox,
     TableContainer,
     Table,
     TableHead,
@@ -14,17 +16,31 @@ import {
 } from "../utils/config";
 
 const ManageNominations = () => {
-    const [candidates,setCandidates] = useState(initialState)
+    const [candidates,setCandidates] = useState(initialState);
     const [page,setPage] = useState(0);
     const [rowsPerPage,setRowsPerPage] = useState(10);
+    const [showRejected,setShowRejected] = useState(false);
 
     const validCandidates = candidates
-        .filter(candidate => candidate.status !== "rejected");
+        .filter(candidate => showRejected
+            ? candidate.status === "rejected"
+            : candidate.status !== "rejected"
+        );
     const shownCandidates = validCandidates
         .slice(page*rowsPerPage, page*rowsPerPage+rowsPerPage);
 
     return (
         <div id="manageNominations">
+            <FormControlLabel
+                control={
+                    <Checkbox
+                        checked={showRejected}
+                        onChange={()=>setShowRejected(!showRejected)}
+                    />
+                }
+                label="show rejected"
+            />
+
             <TableContainer id="dataTable">
                 <Table>
                     <TableHead>
