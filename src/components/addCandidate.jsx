@@ -101,7 +101,7 @@ const AddCandidate = (props) => {
                 <Button
                     variant="contained"
                     onClick={handleSave}
-                    disabled={error}
+                    disabled={error.length!==0}
                 >
                     save
                 </Button>
