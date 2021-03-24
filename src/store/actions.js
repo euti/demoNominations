@@ -4,3 +4,10 @@ export function addCandidate(newCandidate) {
         data: newCandidate,
     }
 }
+
+export function updateStatus(updatedCandidate) {
+    return {
+        type: 'UPDATE_STATUS',
+        data: updatedCandidate,
+    }
+}

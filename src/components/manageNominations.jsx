@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import store from '../store/redux';
+import {
+    updateStatus,
+} from "../store/actions";
 import {
     FormControlLabel,
     Checkbox,
@@ -17,6 +19,7 @@ import {
 const ManageNominations = (props) => {
     const {
         candidates,
+        updateStatus,
     } = props;
     const [page,setPage] = useState(0);
     const [rowsPerPage,setRowsPerPage] = useState(10);
@@ -36,7 +39,10 @@ const ManageNominations = (props) => {
                 control={
                     <Checkbox
                         checked={showRejected}
-                        onChange={()=>setShowRejected(!showRejected)}
+                        onChange={()=> {
+                            setShowRejected(!showRejected);
+                            setPage(0);
+                        }}
                     />
                 }
                 label="show rejected"
@@ -65,14 +71,16 @@ const ManageNominations = (props) => {
                                 <TableCell>{candidate.status}</TableCell>
                                 <TableCell>
                                     <Button
-                                        onClick={()=>{}}
+                                        onClick={() => updateStatus({...candidate, status: "accepted"})}
+                                        disabled={candidate.status === "accepted"}
                                     >
                                         ✓
                                     </Button>
                                 </TableCell>
                                 <TableCell>
                                     <Button
-                                        onClick={()=>{}}
+                                        onClick={() => updateStatus({...candidate, status: "rejected"})}
+                                        disabled={candidate.status === "rejected"}
                                     >
                                         ✘
                                     </Button>
@@ -104,4 +112,8 @@ const mapStateToProps = state => {
     }
 };
 
-export default connect(mapStateToProps, null)(ManageNominations);
+const mapDispatchToProps = {
+    updateStatus,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ManageNominations);

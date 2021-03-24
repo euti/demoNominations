@@ -10,6 +10,16 @@ function reducer(state = initialState, action) {
                 candidates: [...state.candidates,action.data],
             }
         }
+        case 'UPDATE_STATUS': {
+            const newCandidates = [...state.candidates];
+            const index = newCandidates.findIndex(c => {
+                return c.email === action.data.email
+            })
+            newCandidates[index] = action.data
+            return {
+                candidates: newCandidates,
+            }
+        }
         default:
             return state
     }
