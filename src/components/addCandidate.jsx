@@ -47,7 +47,7 @@ const AddCandidate = (props) => {
     };
 
     return (
-        <div id="addCandidate">
+        <div data-testid="addCandidate">
             <FormControl>
                 <Typography>
                         {error}

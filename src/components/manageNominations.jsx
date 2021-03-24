@@ -34,7 +34,7 @@ const ManageNominations = (props) => {
         .slice(page*rowsPerPage, page*rowsPerPage+rowsPerPage);
 
     return (
-        <div id="manageNominations">
+        <div data-testid="manageNominations">
             <FormControlLabel
                 control={
                     <Checkbox
