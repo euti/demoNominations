@@ -1,3 +1,5 @@
 import data from './mockData';
 
-export const initialState = data;
+export const initialState = {
+    candidates: data,
+};

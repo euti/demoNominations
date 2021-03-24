@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import store from '../store/redux';
 import {
     FormControlLabel,
     Checkbox,
@@ -11,12 +13,11 @@ import {
     Button,
     TablePagination,
 } from '@material-ui/core';
-import {
-    initialState,
-} from "../utils/config";
 
-const ManageNominations = () => {
-    const [candidates,setCandidates] = useState(initialState);
+const ManageNominations = (props) => {
+    const {
+        candidates,
+    } = props;
     const [page,setPage] = useState(0);
     const [rowsPerPage,setRowsPerPage] = useState(10);
     const [showRejected,setShowRejected] = useState(false);
@@ -97,4 +98,10 @@ const ManageNominations = () => {
     )
 };
 
-export default ManageNominations;
+const mapStateToProps = state => {
+    return {
+        candidates: state.candidates,
+    }
+};
+
+export default connect(mapStateToProps, null)(ManageNominations);
